@@ -13,6 +13,6 @@ public enum EquipmentStatus {
     AVAILABLE,          // Ready for checkout and use
     CHECKED_OUT,        // Currently in use
     FAULTY,             // Reported faulty, not safe to use
-    UNDER_INSPECTION,   // Temporarily removed for inspecti
+    UNDER_INSPECTION,   // Temporarily removed for inspection
 
 }

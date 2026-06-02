@@ -139,4 +139,8 @@ public abstract class Equipment {
     
     public abstract String getEquipmentType();
 
+    //setter for testing
+    public void setName(String name) {
+    this.name = name;
+}
 }

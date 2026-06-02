@@ -13,6 +13,8 @@ com\cims\view\ConsoleRoleSelector.class
 com\cims\model\domain\EquipmentStatus.class
 com\cims\model\service\InventoryServiceImpl.class
 com\cims\model\domain\UserRole$3.class
+com\cims\database\DatabaseInitialiser.class
+com\cims\model\repository\DerbyEquipmentRepository.class
 com\cims\model\service\CheckoutService.class
 com\cims\model\repository\EquipmentRepository.class
 com\cims\model\domain\UserRole$2.class
@@ -22,6 +24,7 @@ com\cims\util\ApachePoiExcelService.class
 com\cims\model\domain\UserRole$4.class
 com\cims\model\domain\Hardware.class
 com\cims\CIMS.class
+com\cims\database\DatabaseManager.class
 com\cims\model\domain\Apparatus.class
 com\cims\model\service\InspectionService.class
 com\cims\model\domain\UserRole.class

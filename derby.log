@@ -1,37 +1,13 @@
-Thu May 14 13:07:19 NZST 2026 : Apache Derby Network Server - 10.14.2.0 - (1828579) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Thu May 14 13:08:45 NZST 2026:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-019e-2406-1667-ffffb0e9cf9c 
-on database directory M:\ENSE600\CIMS\CIMS with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@105be200 
-Loaded from file:/M:/ENSE600/db-derby-10.14.2.0-bin/lib/derby.jar
+Tue Jun 02 17:57:10 NZST 2026:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-019e-86e8-45d9-00000e7e1520 
+on database directory M:\ENSE600\CIMS\CIMS_TEST_DB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@105be200 
+Loaded from file:/C:/Users/gggob/.m2/repository/org/apache/derby/derby/10.0/derby-10.0.jar
 java.vendor=Eclipse Adoptium
 java.runtime.version=25.0.2+10-LTS
-user.dir=M:\ENSE600\db-derby-10.14.2.0-bin
+user.dir=M:\ENSE600\CIMS
 os.name=Windows 11
 os.arch=amd64
 os.version=10.0
-derby.system.home=M:\ENSE600\CIMS
+derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-Thu May 14 13:08:45 NZST 2026:
-Shutting down instance a816c00e-019e-2406-1667-ffffb0e9cf9c on database directory M:\ENSE600\CIMS\CIMS with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@105be200 
-Thu May 14 13:08:45 NZST 2026 Thread[#31,DRDAConnThread_3,5,main] (DATABASE = CIMS), (DRDAID = {2}), Database 'CIMS' shutdown.
-----------------------------------------------------------------
-Thu May 14 13:09:03 NZST 2026:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance 6ede40af-019e-2406-1667-ffffb0e9cf9c 
-on database directory M:\ENSE600\CIMS\CIMS with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@105be200 
-Loaded from file:/M:/ENSE600/db-derby-10.14.2.0-bin/lib/derby.jar
-java.vendor=Eclipse Adoptium
-java.runtime.version=25.0.2+10-LTS
-user.dir=M:\ENSE600\db-derby-10.14.2.0-bin
-os.name=Windows 11
-os.arch=amd64
-os.version=10.0
-derby.system.home=M:\ENSE600\CIMS
-Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-Thu May 14 13:29:46 NZST 2026: Shutting down Derby engine
-----------------------------------------------------------------
-Thu May 14 13:29:46 NZST 2026:
-Shutting down instance 6ede40af-019e-2406-1667-ffffb0e9cf9c on database directory M:\ENSE600\CIMS\CIMS with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@105be200 
-----------------------------------------------------------------

@@ -70,11 +70,10 @@ public class InspectionServiceImpl implements InspectionService {
 
         if (isSafe) {
             equipment.markAvailable();
+            equipmentRepository.save(equipment);
         } else {
             equipmentRepository.remove(equipmentId);
         }
-
-        equipmentRepository.save(equipment);
     }
 
     @Override

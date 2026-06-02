@@ -2,9 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
 package com.cims;
-
-import com.cims.util.EquipmentExcelService;
-import com.cims.util.ApachePoiExcelService;
 import com.cims.view.Menu;
 import com.cims.view.ConsoleRoleSelector;
 import com.cims.model.service.CheckoutService;
@@ -17,6 +14,8 @@ import com.cims.model.repository.EquipmentRepository;
 import com.cims.model.repository.InMemoryEquipmentRepository;
 import com.cims.model.domain.UserRole;
 import com.cims.model.domain.UserSession;
+import com.cims.model.repository.DerbyEquipmentRepository;
+import com.cims.database.DatabaseInitialiser;
 import java.util.Scanner;
 
 /**
@@ -25,33 +24,16 @@ import java.util.Scanner;
  */
 public class CIMS {
 
-    private static final String EXCEL_FILE_PATH = "inventory.xlsx";
-
     public static void main(String[] args) {
 
+        DatabaseInitialiser.initialise();
         Scanner scanner = new Scanner(System.in);
         System.out.println("=== Circus Inventory Management System ===");
 
         // 1. Create repository (single source of truth)
-        EquipmentRepository repository = new InMemoryEquipmentRepository();
-
-        // 2. Create Excel service
-        EquipmentExcelService excelService
-                = new ApachePoiExcelService(repository);
-
-        // 3. Load data from Excel at startup
-        try {
-            excelService.importEquipment(EXCEL_FILE_PATH);
-            System.out.println("Inventory data loaded from Excel.");
-        } catch (Exception e) {
-            System.out.println(
-                    "Warning: Could not load inventory from Excel. "
-                    + "Starting with empty inventory."
-            );
-            System.out.println("Reason: " + e.getMessage());
-        }
-
-        // 4. Main application loop 
+        EquipmentRepository repository = new DerbyEquipmentRepository();
+                  
+         // 2. Main application loop 
         while (true) {
 
             // Ask user for their role
@@ -92,17 +74,6 @@ public class CIMS {
                 break; // exit application loop
             }
         }
-
-        // 5. Save data once when program actually exits
-        try {
-            excelService.exportEquipment(EXCEL_FILE_PATH);
-            System.out.println("Inventory data saved to Excel.");
-        } catch (Exception e) {
-            System.out.println("3"
-                    + "ERROR: Failed to save inventory to Excel.");
-            System.out.println("Reason: " + e.getMessage());
-        }
-
         scanner.close();
         System.out.println("System shut down. Goodbye!");
     }

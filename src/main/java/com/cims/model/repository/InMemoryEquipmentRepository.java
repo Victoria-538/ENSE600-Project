@@ -5,6 +5,8 @@
 package com.cims.model.repository;
 
 import com.cims.model.domain.Equipment;
+import com.cims.model.domain.EquipmentStatus;
+import com.cims.model.domain.InspectionStatus;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
  * Uses a thread-safe map to support concurrent access.
  */
 public class InMemoryEquipmentRepository implements EquipmentRepository {
+    
 
     private final ConcurrentHashMap<UUID, Equipment> storage = new ConcurrentHashMap<>();
 
@@ -48,6 +51,16 @@ public class InMemoryEquipmentRepository implements EquipmentRepository {
     @Override
     public void remove(UUID id) {
         storage.remove(id);
+    }
+
+    @Override
+    public Collection<Equipment> findByName(String keyword) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Collection<Equipment> filter(String type, EquipmentStatus equipmentStatus, InspectionStatus inspectionStatus) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

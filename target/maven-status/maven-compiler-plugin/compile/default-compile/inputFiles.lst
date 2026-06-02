@@ -1,4 +1,6 @@
 M:\ENSE600\CIMS\src\main\java\com\cims\CIMS.java
+M:\ENSE600\CIMS\src\main\java\com\cims\database\DatabaseInitialiser.java
+M:\ENSE600\CIMS\src\main\java\com\cims\database\DatabaseManager.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\domain\Apparatus.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\domain\Equipment.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\domain\EquipmentStatus.java
@@ -10,6 +12,7 @@ M:\ENSE600\CIMS\src\main\java\com\cims\model\domain\UserSession.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\policy\InspectionPolicy.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\policy\NoInspectionPolicy.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\policy\UsageBasedInspectionPolicy.java
+M:\ENSE600\CIMS\src\main\java\com\cims\model\repository\DerbyEquipmentRepository.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\repository\EquipmentRepository.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\repository\InMemoryEquipmentRepository.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\service\CheckoutService.java
