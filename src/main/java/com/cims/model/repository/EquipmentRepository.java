@@ -18,8 +18,12 @@ public interface EquipmentRepository {
      void save(Equipment equipment);
       Equipment findById(UUID id);
       Collection<Equipment> findAll();
-      Collection<Equipment> findByType(Class<? extends Equipment> type);
-      Collection<Equipment> findByName(String keyword);
-      public Collection<Equipment> filter(String type,EquipmentStatus equipmentStatus,InspectionStatus inspectionStatus);
+      Collection<Equipment> findByType(
+        Class<? extends Equipment> type);
+      // added methods
+      Collection<Equipment> search(String searchTerm);
+      Collection<Equipment> filter(String type,EquipmentStatus equipmentStatus,InspectionStatus inspectionStatus);
       void remove(UUID id);
+      
+      
 }

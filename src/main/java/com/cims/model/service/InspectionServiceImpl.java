@@ -4,6 +4,7 @@
  */
 package com.cims.model.service;
 
+import com.cims.model.domain.ActionType;
 import com.cims.model.repository.EquipmentRepository;
 import com.cims.model.domain.EquipmentStatus;
 import com.cims.model.domain.InspectionStatus;
@@ -18,9 +19,14 @@ import java.util.UUID;
 public class InspectionServiceImpl implements InspectionService {
 
     private final EquipmentRepository equipmentRepository;
+    private final AuditLogService auditLogService;
 
-    public InspectionServiceImpl(EquipmentRepository equipmentRepository) {
+    public InspectionServiceImpl(
+            EquipmentRepository equipmentRepository,
+            AuditLogService auditLogService) {
+
         this.equipmentRepository = equipmentRepository;
+        this.auditLogService = auditLogService;
     }
 
     @Override
@@ -33,10 +39,14 @@ public class InspectionServiceImpl implements InspectionService {
         if (equipment == null) {
             throw new IllegalArgumentException("Equipment not found.");
         }
-
         // Move equipment to inspection state
         equipment.markFaulty();
         equipmentRepository.save(equipment);
+        auditLogService.recordEvent(
+        equipment,
+        session,
+        ActionType.FAULT_REPORTED,
+        "Flagged for inspection");
 
     }
 
@@ -71,8 +81,18 @@ public class InspectionServiceImpl implements InspectionService {
         if (isSafe) {
             equipment.markAvailable();
             equipmentRepository.save(equipment);
+            auditLogService.recordEvent(
+        equipment,
+        session,
+        ActionType.INSPECTION,
+        "Inspection passed - equipment marked available");
         } else {
             equipmentRepository.remove(equipmentId);
+            auditLogService.recordEvent(
+        equipment,
+        session,
+        ActionType.REMOVED,
+        "Inspection failed - equipment discarded");
         }
     }
 
@@ -89,6 +109,11 @@ public class InspectionServiceImpl implements InspectionService {
 
         equipment.markAvailable();
         equipmentRepository.save(equipment);
+        auditLogService.recordEvent(
+        equipment,
+        session,
+        ActionType.INSPECTION,
+        "Manually marked safe after inspection");
     }
 
     private boolean assessEquipmentSafety(Equipment equipment) {

@@ -54,11 +54,22 @@ public abstract class Equipment {
         this.inspectionStatus = inspectionStatus;
     }
 
+    @Override
+    public String toString() {
+        return String.format(
+                "%s | %s | %s | %s | %s",
+                eqId,
+                getEquipmentType(),
+                name,
+                equipmentStatus,
+                inspectionStatus);
+    }
 
     /* =========================
        State Transitions
        ========================= */
     public void markCheckedOut() {
+        ensureAvailable();
         this.equipmentStatus = EquipmentStatus.CHECKED_OUT;
     }
 
@@ -102,6 +113,28 @@ public abstract class Equipment {
         return inspectionPolicy.requiresInspection(timesUsed);
     }
 
+    public boolean needsAttention() {
+        return equipmentStatus == EquipmentStatus.FAULTY
+                || inspectionStatus == InspectionStatus.DUE
+                || inspectionStatus == InspectionStatus.FLAGGED_FAULTY;
+    }
+
+    public String getAlertMessage() {
+
+        if (equipmentStatus == EquipmentStatus.FAULTY) {
+            return "Faulty - Remove from service";
+        }
+
+        if (inspectionStatus == InspectionStatus.FLAGGED_FAULTY) {
+            return "Inspection Required - Flagged Faulty";
+        }
+
+        if (inspectionStatus == InspectionStatus.DUE) {
+            return "Inspection Due";
+        }
+
+        return null;
+    }
 
     /* =========================
        Validation Helpers
@@ -136,11 +169,11 @@ public abstract class Equipment {
     public int getTimesUsed() {
         return timesUsed;
     }
-    
+
     public abstract String getEquipmentType();
 
     //setter for testing
     public void setName(String name) {
-    this.name = name;
-}
+        this.name = name;
+    }
 }

@@ -48,6 +48,33 @@ public class DerbyEquipmentRepository implements EquipmentRepository {
     }
 
     @Override
+    public Collection<Equipment> findByType(
+            Class<? extends Equipment> type) {
+
+        List<Equipment> results = new ArrayList<>();
+
+        String sql = "SELECT * FROM EQUIPMENT WHERE type = ?";
+
+        try (Connection conn = DatabaseManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, type.getSimpleName());
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    results.add(mapRow(rs));
+                }
+            }
+
+            return results;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(
+                    "Error retrieving equipment by type", e);
+        }
+    }
+
+    @Override
     public Collection<Equipment> findAll() {
         List<Equipment> equipment = new ArrayList<>();
 
@@ -65,19 +92,39 @@ public class DerbyEquipmentRepository implements EquipmentRepository {
     }
 
     @Override
-    public Collection<Equipment> findByType(Class<? extends Equipment> type) {
+    public Collection<Equipment> filter(String type, EquipmentStatus equipmentStatus, InspectionStatus inspectionStatus) {
+
         List<Equipment> results = new ArrayList<>();
 
-        String sql
-                = "SELECT * FROM EQUIPMENT WHERE type = ?";
+        StringBuilder sql = new StringBuilder("SELECT * FROM EQUIPMENT WHERE 1=1");
+        List<Object> params = new ArrayList<>();
 
-        try (
-                Connection conn = DatabaseManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        // ✅ Filter by type (ignore null or blank)
+        if (type != null && !type.isBlank()) {
+            sql.append(" AND type = ?");
+            params.add(type);
+        }
 
-            ps.setString(1, type.getSimpleName());
+        // ✅ Filter by equipment status (enum)
+        if (equipmentStatus != null) {
+            sql.append(" AND equipment_status = ?");
+            params.add(equipmentStatus.name());
+        }
+
+        // ✅ Filter by inspection status (enum)
+        if (inspectionStatus != null) {
+            sql.append(" AND inspection_status = ?");
+            params.add(inspectionStatus.name());
+        }
+
+        try (Connection conn = DatabaseManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            // ✅ Set parameters dynamically
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
 
             try (ResultSet rs = ps.executeQuery()) {
-
                 while (rs.next()) {
                     results.add(mapRow(rs));
                 }
@@ -86,77 +133,9 @@ public class DerbyEquipmentRepository implements EquipmentRepository {
             return results;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error executing filter query", e);
         }
     }
-
-    
-@Override
-public Collection<Equipment> findByName(String keyword) {
-
-    List<Equipment> results = new ArrayList<>();
-    String sql = "SELECT * FROM EQUIPMENT WHERE LOWER(name) LIKE ?";
-    try (Connection conn = DatabaseManager.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, "%" + keyword.toLowerCase() + "%");
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                results.add(mapRow(rs));
-            }
-        }
-    } catch (SQLException e) {
-        throw new RuntimeException(e);
-    }
-    return results;
-}
-
-@Override
-public Collection<Equipment> filter(String type,EquipmentStatus equipmentStatus,InspectionStatus inspectionStatus) {
-
-    List<Equipment> results = new ArrayList<>();
-
-    StringBuilder sql = new StringBuilder("SELECT * FROM EQUIPMENT WHERE 1=1");
-    List<Object> params = new ArrayList<>();
-
-    // ✅ Filter by type (ignore null or blank)
-    if (type != null && !type.isBlank()) {
-        sql.append(" AND type = ?");
-        params.add(type);
-    }
-
-    // ✅ Filter by equipment status (enum)
-    if (equipmentStatus != null) {
-        sql.append(" AND equipment_status = ?");
-        params.add(equipmentStatus.name());
-    }
-
-    // ✅ Filter by inspection status (enum)
-    if (inspectionStatus != null) {
-        sql.append(" AND inspection_status = ?");
-        params.add(inspectionStatus.name());
-    }
-
-    try (Connection conn = DatabaseManager.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql.toString())) {
-
-        // ✅ Set parameters dynamically
-        for (int i = 0; i < params.size(); i++) {
-            ps.setObject(i + 1, params.get(i));
-        }
-
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                results.add(mapRow(rs));
-            }
-        }
-
-        return results;
-
-    } catch (SQLException e) {
-        throw new RuntimeException("Error executing filter query", e);
-    }
-}
-
 
     @Override
     public void remove(UUID id) {
@@ -261,5 +240,39 @@ public Collection<Equipment> filter(String type,EquipmentStatus equipmentStatus,
                 throw new IllegalStateException(
                         "Unknown equipment type: " + type);
         };
+    }
+
+    //added methods - this has replaced findByName and findByType methods - now user can search by anythign else not just a name
+    @Override
+    public Collection<Equipment> search(String keyword) {
+        List<Equipment> results = new ArrayList<>();
+
+        String sql = """
+        SELECT *
+        FROM EQUIPMENT
+        WHERE LOWER(name) LIKE ?
+           OR LOWER(id) LIKE ?
+           OR LOWER(type) LIKE ?
+        """;
+
+        try (Connection conn = DatabaseManager.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            String search = "%" + keyword.toLowerCase() + "%";
+            if (keyword == null || keyword.isBlank()) {
+                return findAll();
+            }
+            ps.setString(1, search);
+            ps.setString(2, search);
+            ps.setString(3, search);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    results.add(mapRow(rs));
+                }
+            }
+
+            return results;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

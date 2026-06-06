@@ -10,7 +10,7 @@ package com.cims.model.domain;
  */
 public class UserSession {
      private UserRole user;
-     
+     private final String userName = "unknown";
      public UserSession(UserRole user){
          this. user = user;
      }
@@ -18,5 +18,9 @@ public class UserSession {
      public UserRole getRole()
      {
          return this.user;
+     }
+     public String getUserName()
+     {
+         return this.userName;
      }
 }

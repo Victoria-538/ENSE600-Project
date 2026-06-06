@@ -5,11 +5,7 @@
 package com.cims.model.service;
 
 import com.cims.model.repository.EquipmentRepository;
-import com.cims.model.domain.UserSession;
-import com.cims.model.domain.Equipment;
-import com.cims.model.domain.Hardware;
-import com.cims.model.domain.Apparatus;
-import com.cims.model.domain.Prop;
+import com.cims.model.domain.*;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -21,11 +17,16 @@ public class InventoryServiceImpl implements InventoryService {
 
     private final EquipmentRepository equipmentRepository;
     private final UserSession session;
+    private final AuditLogService auditLogService;
 
-    public InventoryServiceImpl(EquipmentRepository equipmentRepository,
-            UserSession session) {
+    public InventoryServiceImpl(
+            EquipmentRepository equipmentRepository,
+            UserSession session,
+            AuditLogService auditLogService) {
+
         this.equipmentRepository = equipmentRepository;
         this.session = session;
+        this.auditLogService = auditLogService;
     }
 
     @Override
@@ -37,6 +38,11 @@ public class InventoryServiceImpl implements InventoryService {
                     + " cannot add equipment.");
         }
         equipmentRepository.save(equipment);
+        auditLogService.recordEvent(
+        equipment,
+        session,
+        ActionType.ADDED,
+        "Equipment added to inventory");
     }
 
     @Override
@@ -50,6 +56,11 @@ public class InventoryServiceImpl implements InventoryService {
         }
 
         equipmentRepository.remove(equipment.getId());
+        auditLogService.recordEvent(
+        equipment,
+        session,
+        ActionType.REMOVED,
+        "Equipment removed from inventory");
     }
 
     @Override
@@ -89,6 +100,24 @@ public class InventoryServiceImpl implements InventoryService {
                 .map(Prop.class::cast)
                 .collect(Collectors.toList());
 
+    }
+
+    //added methods
+    @Override
+    public Collection<Equipment> search(String searchTerm) {
+        return equipmentRepository.search(searchTerm);
+    }
+
+    @Override
+    public Collection<Equipment> filter(
+            String type,
+            EquipmentStatus equipmentStatus,
+            InspectionStatus inspectionStatus) {
+
+        return equipmentRepository.filter(
+                type,
+                equipmentStatus,
+                inspectionStatus);
     }
 
 }

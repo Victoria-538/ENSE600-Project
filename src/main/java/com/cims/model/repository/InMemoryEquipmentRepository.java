@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
  * Uses a thread-safe map to support concurrent access.
  */
 public class InMemoryEquipmentRepository implements EquipmentRepository {
-    
 
     private final ConcurrentHashMap<UUID, Equipment> storage = new ConcurrentHashMap<>();
 
@@ -36,16 +35,18 @@ public class InMemoryEquipmentRepository implements EquipmentRepository {
     }
 
     @Override
-    public Collection<Equipment> findAll() {
-        return storage.values();
-    }
+    public Collection<Equipment> findByType(
+            Class<? extends Equipment> type) {
 
-    @Override
-    public Collection<Equipment> findByType(Class<? extends Equipment> type) {
         return storage.values()
                 .stream()
                 .filter(type::isInstance)
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    @Override
+    public Collection<Equipment> findAll() {
+        return storage.values();
     }
 
     @Override
@@ -53,14 +54,39 @@ public class InMemoryEquipmentRepository implements EquipmentRepository {
         storage.remove(id);
     }
 
+//added methods
     @Override
-    public Collection<Equipment> findByName(String keyword) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Collection<Equipment> filter(String type, EquipmentStatus equipmentStatus, InspectionStatus inspectionStatus) {
+        return storage.values()
+                .stream()
+                .filter(e
+                        -> type == null
+                || type.isBlank()
+                || e.getEquipmentType().equalsIgnoreCase(type))
+                .filter(e
+                        -> equipmentStatus == null
+                || e.getEquipmentStatus() == equipmentStatus)
+                .filter(e
+                        -> inspectionStatus == null
+                || e.getInspectionStatus() == inspectionStatus)
+                .toList();
     }
 
     @Override
-    public Collection<Equipment> filter(String type, EquipmentStatus equipmentStatus, InspectionStatus inspectionStatus) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Collection<Equipment> search(String searchTerm) {
+        if (searchTerm == null || searchTerm.isBlank()) {
+            return findAll();
+        }
+
+        String query = searchTerm.toLowerCase();
+
+        return storage.values()
+                .stream()
+                .filter(e
+                        -> e.getName().toLowerCase().contains(query)
+                || e.getId().toString().toLowerCase().contains(query)
+                || e.getEquipmentType().toLowerCase().contains(query))
+                .toList();
     }
 
 }

@@ -2,20 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
 package com.cims;
+
 import com.cims.view.Menu;
 import com.cims.view.ConsoleRoleSelector;
-import com.cims.model.service.CheckoutService;
-import com.cims.model.service.InventoryService;
-import com.cims.model.service.CheckoutServiceImpl;
-import com.cims.model.service.InventoryServiceImpl;
-import com.cims.model.service.InspectionServiceImpl;
-import com.cims.model.service.InspectionService;
-import com.cims.model.repository.EquipmentRepository;
-import com.cims.model.repository.InMemoryEquipmentRepository;
+import com.cims.model.service.*;
+import com.cims.model.repository.*;
 import com.cims.model.domain.UserRole;
 import com.cims.model.domain.UserSession;
-import com.cims.model.repository.DerbyEquipmentRepository;
-import com.cims.database.DatabaseInitialiser;
+import com.cims.database.*;
+import com.cims.model.domain.*;
+import java.util.Collection;
 import java.util.Scanner;
 
 /**
@@ -32,8 +28,10 @@ public class CIMS {
 
         // 1. Create repository (single source of truth)
         EquipmentRepository repository = new DerbyEquipmentRepository();
-                  
-         // 2. Main application loop 
+        AuditLogRepository auditRepo = new DerbyAuditLogRepository();
+        AuditLogService auditLogService = new AuditLogServiceImpl(auditRepo);
+                      
+        // 2. Main application loop 
         while (true) {
 
             // Ask user for their role
@@ -45,13 +43,19 @@ public class CIMS {
 
             // Create services (session-aware where required)
             InventoryService inventoryService
-                    = new InventoryServiceImpl(repository, session);
+                    = new InventoryServiceImpl(repository, session, auditLogService);
 
             CheckoutService checkoutService
-                    = new CheckoutServiceImpl(repository);
+                    = new CheckoutServiceImpl(repository, auditLogService);
 
             InspectionService inspectionService
-                    = new InspectionServiceImpl(repository);
+                    = new InspectionServiceImpl(repository, auditLogService);
+
+            ReportService reportService
+                    = new ReportServiceImpl(repository);
+
+            AlertService alertService
+                    = new AlertServiceImpl(repository);
 
             // Create and start menu
             Menu menu = new Menu(
@@ -60,9 +64,7 @@ public class CIMS {
                     inspectionService,
                     scanner
             );
-
             menu.start(session);
-
             // Menu returned → role logout
             System.out.println("\nUser logged out.\n");
 
@@ -75,6 +77,7 @@ public class CIMS {
             }
         }
         scanner.close();
+        DatabaseManager.shutdown();
         System.out.println("System shut down. Goodbye!");
     }
 

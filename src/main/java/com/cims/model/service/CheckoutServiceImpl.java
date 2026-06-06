@@ -4,6 +4,7 @@
  */
 package com.cims.model.service;
 
+import com.cims.model.domain.ActionType;
 import com.cims.model.repository.EquipmentRepository;
 import com.cims.model.domain.EquipmentStatus;
 import com.cims.model.domain.InspectionStatus;
@@ -18,10 +19,14 @@ import java.util.UUID;
 public class CheckoutServiceImpl implements CheckoutService {
 
     private final EquipmentRepository equipmentRepository;
+private final AuditLogService auditLogService;
+    public CheckoutServiceImpl(
+        EquipmentRepository equipmentRepository,
+        AuditLogService auditLogService) {
 
-    public CheckoutServiceImpl(EquipmentRepository equipmentRepository) {
-        this.equipmentRepository = equipmentRepository;
-    }
+    this.equipmentRepository = equipmentRepository;
+    this.auditLogService = auditLogService;
+}
 
     @Override
     public void checkOut(UUID equipmentId, UserSession session) {
@@ -50,7 +55,11 @@ public class CheckoutServiceImpl implements CheckoutService {
         // Perform checkout
         equipment.markCheckedOut();
         equipmentRepository.save(equipment);
-
+auditLogService.recordEvent(
+        equipment,
+        session,
+        ActionType.CHECKOUT,
+        "Equipment checked out");
     }
 
     @Override
@@ -69,6 +78,11 @@ public class CheckoutServiceImpl implements CheckoutService {
         // Perform check-in (increments usage inside Equipment)
         equipment.markCheckedIn();
         equipmentRepository.save(equipment);
+        auditLogService.recordEvent(
+        equipment,
+        session,
+        ActionType.CHECKIN,
+        "Equipment checked in");
 
     }
 

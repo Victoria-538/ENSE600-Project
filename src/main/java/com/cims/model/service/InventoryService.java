@@ -7,6 +7,8 @@ package com.cims.model.service;
 import com.cims.model.domain.Equipment;
 import com.cims.model.domain.Hardware;
 import com.cims.model.domain.Apparatus;
+import com.cims.model.domain.EquipmentStatus;
+import com.cims.model.domain.InspectionStatus;
 import com.cims.model.domain.Prop;
 import java.util.Collection;
 
@@ -22,4 +24,11 @@ public interface InventoryService {
     Collection<Hardware>  listHardware();
     Collection<Apparatus> listApparatus();
     Collection<Prop>  listProps();
+    
+    //added methods
+    Collection<Equipment> search(String searchTerm);
+    Collection<Equipment> filter(
+        String type,
+        EquipmentStatus equipmentStatus,
+        InspectionStatus inspectionStatus);
 }

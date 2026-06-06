@@ -27,4 +27,13 @@ public class DatabaseManager {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(DATABASE_URL);
     }
+    
+    public static void shutdown() {
+    try {
+        DriverManager.getConnection(
+                "jdbc:derby:CIMS_DB;shutdown=true");
+    } catch (SQLException e) {
+        // Derby throws an exception on successful shutdown
+    }
+}
 }
