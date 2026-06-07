@@ -13,9 +13,7 @@ import java.util.UUID;
  */
 public interface InspectionService {
 
-    void flagForInspection(UUID equipmentId, UserSession session);
-
+    void flagForInspection(UUID equipmentId, UserSession session, String notes);
     void conductInspection(UUID equipmentId, UserSession session);
-
-    void markSafe(UUID equipmentId, UserSession session);
+    void markSafe(UUID equipmentId, UserSession session,  String notes);
 }

@@ -20,9 +20,10 @@ import java.io.IOException;
 import java.util.UUID;
 
 /**
- *
- * @author gggob
+ * LEGACY - replaced by database persistence layer.
+ * Kept for backup import/export only.
  */
+@Deprecated
 public class ApachePoiExcelService implements EquipmentExcelService {
 
     private final EquipmentRepository repository;

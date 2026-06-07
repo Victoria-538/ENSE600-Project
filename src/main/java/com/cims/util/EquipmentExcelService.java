@@ -10,6 +10,7 @@ import java.util.Collection;
  *
  * @author gggob
  */
+@Deprecated
 public interface EquipmentExcelService {
      void importEquipment(String filePath);
      void exportEquipment(String filePath);

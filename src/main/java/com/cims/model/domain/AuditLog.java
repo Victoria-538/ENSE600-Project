@@ -15,17 +15,17 @@ import java.util.UUID;
 public class AuditLog {
          private final long id;
 
-    public final LocalDateTime actionTime;
+    private final LocalDateTime actionTime;
 
-    public final UUID equipmentId;
-    public final String equipmentName;
+    private final UUID equipmentId;
+    private final String equipmentName;
 
-    public final String userName;
-    public final String userRole;
+    private final String userName;
+    private final String userRole;
 
-    public final ActionType actionType;
+    private final ActionType actionType;
 
-    public final String notes;
+    private final String notes;
 
     public AuditLog(
             long id,
@@ -57,5 +57,37 @@ public class AuditLog {
                 actionType,
                 notes
         );
+    }
+    
+    public long getId() {
+        return id;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return actionTime;
+    }
+
+    public UUID getEquipmentId() {
+        return equipmentId;
+    }
+
+    public String getEquipmentName() {
+        return equipmentName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getRole() {
+        return userRole;
+    }
+
+    public ActionType getActionType() {
+        return actionType;
+    }
+
+    public String getNotes() {
+        return notes;
     }
 }

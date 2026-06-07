@@ -1,4 +1,4 @@
-# Created at 2026-06-06T19:55:10.064
+# Created at 2026-06-07T22:15:55.062
 Boot Manifest-JAR contains absolute paths in classpath 'M:\ENSE600\CIMS\target\test-classes'
 Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
 'other' has different root

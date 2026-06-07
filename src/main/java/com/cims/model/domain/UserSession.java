@@ -9,15 +9,16 @@ package com.cims.model.domain;
  * @author gggob
  */
 public class UserSession {
-     private UserRole user;
-     private final String userName = "unknown";
-     public UserSession(UserRole user){
-         this. user = user;
+     private UserRole role;
+     private final String userName;
+     public UserSession(UserRole user, String name){
+         this. role = user;
+         this.userName = name;
      }
      
      public UserRole getRole()
      {
-         return this.user;
+         return this.role;
      }
      public String getUserName()
      {

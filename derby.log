@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Sat Jun 06 21:39:20 NZST 2026:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-019e-9c4d-1f49-00000f0e0ef8 
+Sun Jun 07 23:37:27 NZST 2026:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-019e-a1df-9f17-00000f0ebcd8 
 on database directory M:\ENSE600\CIMS\CIMS_DB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@105be200 
 Loaded from file:/C:/Users/gggob/.m2/repository/org/apache/derby/derby/10.0/derby-10.0.jar
 java.vendor=Eclipse Adoptium
@@ -11,6 +11,3 @@ os.arch=amd64
 os.version=10.0
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
-----------------------------------------------------------------
-Sat Jun 06 21:39:46 NZST 2026:
-Shutting down instance a816c00e-019e-9c4d-1f49-00000f0e0ef8 on database directory M:\ENSE600\CIMS\CIMS_DB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@105be200 

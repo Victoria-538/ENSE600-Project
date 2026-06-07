@@ -30,7 +30,7 @@ public class InspectionServiceImpl implements InspectionService {
     }
 
     @Override
-    public void flagForInspection(UUID equipmentId, UserSession session) {
+    public void flagForInspection(UUID equipmentId, UserSession session, String notes) {
         // Role check not required - everyone is permitted to flag for inspection,
         //even though technically only riggers and perforomers will be doing so
 
@@ -39,6 +39,10 @@ public class InspectionServiceImpl implements InspectionService {
         if (equipment == null) {
             throw new IllegalArgumentException("Equipment not found.");
         }
+        
+        String finalNote = (notes == null || notes.trim().isEmpty())
+        ? "Flagged for inspection"
+        : "Flagged for inspection | Note: " + notes.trim();
         // Move equipment to inspection state
         equipment.markFaulty();
         equipmentRepository.save(equipment);
@@ -46,7 +50,7 @@ public class InspectionServiceImpl implements InspectionService {
         equipment,
         session,
         ActionType.FAULT_REPORTED,
-        "Flagged for inspection");
+        finalNote);
 
     }
 
@@ -97,7 +101,7 @@ public class InspectionServiceImpl implements InspectionService {
     }
 
     @Override
-    public void markSafe(UUID equipmentId, UserSession session) {
+    public void markSafe(UUID equipmentId, UserSession session, String notes) {
         Equipment equipment = equipmentRepository.findById(equipmentId);
         if (equipment == null) {
             throw new IllegalArgumentException("Equipment not found.");
@@ -109,11 +113,15 @@ public class InspectionServiceImpl implements InspectionService {
 
         equipment.markAvailable();
         equipmentRepository.save(equipment);
+          String finalNote = notes == null || notes.isBlank()
+            ? "Manually marked safe after inspection"
+            : "Manually marked safe after inspection | Note: "
+                    + notes.trim();
         auditLogService.recordEvent(
         equipment,
         session,
         ActionType.INSPECTION,
-        "Manually marked safe after inspection");
+        finalNote);
     }
 
     private boolean assessEquipmentSafety(Equipment equipment) {

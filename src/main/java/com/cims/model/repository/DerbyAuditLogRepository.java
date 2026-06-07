@@ -40,31 +40,31 @@ public class DerbyAuditLogRepository implements AuditLogRepository {
 
             ps.setTimestamp(
                     1,
-                    Timestamp.valueOf(log.actionTime));
+                    Timestamp.valueOf(log.getTimestamp()));
 
             ps.setString(
                     2,
-                    log.equipmentId.toString());
+                    log.getEquipmentId().toString());
 
             ps.setString(
                     3,
-                    log.equipmentName);
+                    log.getEquipmentName());
 
             ps.setString(
                     4,
-                    log.userName);
+                    log.getUserName());
 
             ps.setString(
                     5,
-                    log.userRole);
+                    log.getRole());
 
             ps.setString(
                     6,
-                    log.actionType.name());
+                    log.getActionType().name());
 
             ps.setString(
                     7,
-                    log.notes!= null ? log.notes : "");
+                    log.getNotes()!= null ? log.getNotes() : "");
 
             ps.executeUpdate();
 

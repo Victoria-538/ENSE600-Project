@@ -12,6 +12,7 @@ import java.util.UUID;
  * @author gggob
  */
 public interface CheckoutService {
-     void checkOut(UUID equipmentId, UserSession session);
-     void checkIn(UUID equipmentId, UserSession session);
+
+    void checkOut(UUID equipmentId, UserSession session, String notes);
+    void checkIn(UUID equipmentId, UserSession session, String notes);
 }

@@ -19,23 +19,24 @@ import java.util.UUID;
 public class CheckoutServiceImpl implements CheckoutService {
 
     private final EquipmentRepository equipmentRepository;
-private final AuditLogService auditLogService;
-    public CheckoutServiceImpl(
-        EquipmentRepository equipmentRepository,
-        AuditLogService auditLogService) {
+    private final AuditLogService auditLogService;
 
-    this.equipmentRepository = equipmentRepository;
-    this.auditLogService = auditLogService;
-}
+    public CheckoutServiceImpl(
+            EquipmentRepository equipmentRepository,
+            AuditLogService auditLogService) {
+
+        this.equipmentRepository = equipmentRepository;
+        this.auditLogService = auditLogService;
+    }
 
     @Override
-    public void checkOut(UUID equipmentId, UserSession session) {
-        
+    public void checkOut(UUID equipmentId, UserSession session, String notes) {
+
         Equipment equipment = equipmentRepository.findById(equipmentId);
         if (equipment == null) {
             throw new IllegalArgumentException("Equipment not found.");
         }
-        
+
         // Check if user is authorised to check out
         if (!session.getRole().canCheckout(equipment)) {
             throw new SecurityException(
@@ -52,18 +53,22 @@ private final AuditLogService auditLogService;
             throw new IllegalStateException("Equipment requires inspection before use.");
         }
 
+        String finalNote = (notes == null || notes.trim().isEmpty())
+        ? "Equipment checked out"
+        : "Equipment checked out | Note: " + notes.trim();
+        
         // Perform checkout
         equipment.markCheckedOut();
         equipmentRepository.save(equipment);
-auditLogService.recordEvent(
-        equipment,
-        session,
-        ActionType.CHECKOUT,
-        "Equipment checked out");
+        auditLogService.recordEvent(
+                equipment,
+                session,
+                ActionType.CHECKOUT,
+                finalNote);
     }
 
     @Override
-    public void checkIn(UUID equipmentId, UserSession session) {
+    public void checkIn(UUID equipmentId, UserSession session, String notes) {
 
         Equipment equipment = equipmentRepository.findById(equipmentId);
         if (equipment == null) {
@@ -75,14 +80,18 @@ auditLogService.recordEvent(
             throw new IllegalStateException("Equipment is not currently checked out.");
         }
 
+       String finalNote = (notes == null || notes.trim().isEmpty())
+        ? "Equipment checked in"
+        : "Equipment checked in | Note: " + notes.trim();
+       
         // Perform check-in (increments usage inside Equipment)
         equipment.markCheckedIn();
         equipmentRepository.save(equipment);
         auditLogService.recordEvent(
-        equipment,
-        session,
-        ActionType.CHECKIN,
-        "Equipment checked in");
+                equipment,
+                session,
+                ActionType.CHECKIN,
+                finalNote);
 
     }
 

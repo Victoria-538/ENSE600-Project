@@ -1,0 +1,86 @@
+===== AUDIT LOG =====
+
+Time: 2026-06-07T22:16:21.420752900
+User: ss (PERFORMER)
+Equipment: Hula Hoop
+Action: CHECKOUT
+Notes: Equipment checked out | Note: Check out note
+---------------------------------
+Time: 2026-06-07T22:10:22.902263800
+User: h (PERFORMER)
+Equipment: Aerial Hoop
+Action: CHECKIN
+Notes: Equipment checked in | Note: Hoop checked in test
+---------------------------------
+Time: 2026-06-07T22:01:26.999887100
+User: s (PERFORMER)
+Equipment: Juggling balls
+Action: CHECKOUT
+Notes: Equipment checked out | Note: testing
+---------------------------------
+Time: 2026-06-07T21:41:20.035863900
+User: gg (PERFORMER)
+Equipment: Trapeze
+Action: CHECKIN
+Notes: Equipment checked in
+---------------------------------
+Time: 2026-06-07T21:41:06.075269600
+User: f (RIGGER)
+Equipment: Trapeze
+Action: CHECKOUT
+Notes: Equipment checked out
+---------------------------------
+Time: 2026-06-07T21:40:32.860846300
+User: l (INVENTORY_MANAGER)
+Equipment: Staps - long
+Action: ADDED
+Notes: Equipment added to inventory
+---------------------------------
+Time: 2026-06-07T21:22:06.932065900
+User: q (RIGGER)
+Equipment: Aerial Hoop
+Action: CHECKOUT
+Notes: Equipment checked out
+---------------------------------
+Time: 2026-06-07T20:54:41.970201500
+User: a (ENGINEER)
+Equipment: Carabiner
+Action: INSPECTION
+Notes: Manually marked safe after inspection
+---------------------------------
+Time: 2026-06-07T20:42:00.002674
+User: z (RIGGER)
+Equipment: Hula Hoop
+Action: CHECKIN
+Notes: Equipment checked in
+---------------------------------
+Time: 2026-06-07T20:41:51.812289300
+User: z (RIGGER)
+Equipment: Carabiner
+Action: FAULT_REPORTED
+Notes: Flagged for inspection
+---------------------------------
+Time: 2026-06-07T20:41:46.804627700
+User: z (RIGGER)
+Equipment: Carabiner - pear
+Action: CHECKOUT
+Notes: Equipment checked out
+---------------------------------
+Time: 2026-06-07T19:46:22.184477500
+User: a (INVENTORY_MANAGER)
+Equipment: Carabiner - pear
+Action: ADDED
+Notes: Equipment added to inventory
+---------------------------------
+Time: 2026-06-06T21:39:07.459005
+User: unknown (RIGGER)
+Equipment: Trapeze
+Action: CHECKIN
+Notes: Equipment checked in
+---------------------------------
+Time: 2026-06-06T21:38:45.653341500
+User: unknown (PERFORMER)
+Equipment: Aerial Hoop
+Action: CHECKIN
+Notes: Equipment checked in
+---------------------------------
