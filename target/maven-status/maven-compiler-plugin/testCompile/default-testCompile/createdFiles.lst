@@ -1,1 +1,3 @@
 com\cims\model\repository\DerbyEquipmentRepositoryTest.class
+com\cims\model\service\InspectionServiceTest.class
+com\cims\model\service\CheckoutServiceTest.class

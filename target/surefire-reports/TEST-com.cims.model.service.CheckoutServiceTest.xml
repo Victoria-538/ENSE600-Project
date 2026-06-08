@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.cims.model.repository.DerbyEquipmentRepositoryTest" time="0.83" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.cims.model.service.CheckoutServiceTest" time="0.113" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="25"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -61,12 +61,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="69.0"/>
   </properties>
-  <testcase name="testFindAllReturnsEquipment" classname="com.cims.model.repository.DerbyEquipmentRepositoryTest" time="0.64"/>
-  <testcase name="testFindByType" classname="com.cims.model.repository.DerbyEquipmentRepositoryTest" time="0.028"/>
-  <testcase name="testRemove" classname="com.cims.model.repository.DerbyEquipmentRepositoryTest" time="0.033"/>
-  <testcase name="testSaveAndFindById" classname="com.cims.model.repository.DerbyEquipmentRepositoryTest" time="0.031">
-    <system-out><![CDATA[save
-]]></system-out>
-  </testcase>
-  <testcase name="testUpdateEquipment" classname="com.cims.model.repository.DerbyEquipmentRepositoryTest" time="0.037"/>
+  <testcase name="testEngineerCannotCheckoutEquipment" classname="com.cims.model.service.CheckoutServiceTest" time="0.025"/>
+  <testcase name="testCheckinChangesStatusToAvailable" classname="com.cims.model.service.CheckoutServiceTest" time="0.058"/>
+  <testcase name="testCheckoutChangesStatusToCheckedOut" classname="com.cims.model.service.CheckoutServiceTest" time="0.027"/>
 </testsuite>

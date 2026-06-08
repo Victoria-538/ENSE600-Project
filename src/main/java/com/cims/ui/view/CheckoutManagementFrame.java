@@ -28,6 +28,9 @@ public class CheckoutManagementFrame extends JFrame {
     private JTextField txtSearch;
 
     private JButton btnSearch;
+    private JComboBox<String> cmbType;
+    private JComboBox<EquipmentStatus> cmbEquipmentStatus;
+    private JComboBox<InspectionStatus> cmbInspectionStatus;
 
     private JButton btnCheckout;
     private JButton btnCheckin;
@@ -58,7 +61,7 @@ public class CheckoutManagementFrame extends JFrame {
 
     private void initialiseFrame() {
         setTitle("Checkout Management");
-        setSize(800, 500);
+        setSize(1000, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -66,7 +69,24 @@ public class CheckoutManagementFrame extends JFrame {
     private void initialiseComponents() {
 
         txtSearch = new JTextField(20);
+        cmbType = new JComboBox<>(new String[]{
+            "All",
+            "Hardware",
+            "Apparatus",
+            "Prop"
+        });
 
+        cmbEquipmentStatus = new JComboBox<>();
+        cmbEquipmentStatus.addItem(null);
+        for (EquipmentStatus s : EquipmentStatus.values()) {
+            cmbEquipmentStatus.addItem(s);
+        }
+
+        cmbInspectionStatus = new JComboBox<>();
+        cmbInspectionStatus.addItem(null);
+        for (InspectionStatus s : InspectionStatus.values()) {
+            cmbInspectionStatus.addItem(s);
+        }
         btnSearch = new JButton("Search");
 
         btnCheckout = new JButton("Checkout");
@@ -98,9 +118,26 @@ public class CheckoutManagementFrame extends JFrame {
 
         JPanel main = new JPanel(new BorderLayout(10, 10));
 
-        JPanel top = new JPanel();
-        top.add(btnSearch);
-        top.add(txtSearch);
+        JPanel top = new JPanel(new BorderLayout());
+
+        JPanel filterPanel = new JPanel();
+
+        filterPanel.add(new JLabel("Type:"));
+        filterPanel.add(cmbType);
+
+        filterPanel.add(new JLabel("Status:"));
+        filterPanel.add(cmbEquipmentStatus);
+
+        filterPanel.add(new JLabel("Inspection:"));
+        filterPanel.add(cmbInspectionStatus);
+
+        JPanel searchPanel = new JPanel();
+        searchPanel.add(new JLabel("Search:"));
+        searchPanel.add(txtSearch);
+        searchPanel.add(btnSearch);
+
+        top.add(filterPanel, BorderLayout.WEST);
+        top.add(searchPanel, BorderLayout.EAST);
 
         JPanel bottom = new JPanel();
         bottom.add(btnCheckout);
@@ -118,28 +155,32 @@ public class CheckoutManagementFrame extends JFrame {
     private void registerListeners() {
 
         btnSearch.addActionListener(e
-                -> loadEquipment(inventoryService.search(txtSearch.getText().trim()))
-        );
+                -> applyFilters());
+        cmbType.addActionListener(e -> applyFilters());
+
+        cmbEquipmentStatus.addActionListener(e -> applyFilters());
+
+        cmbInspectionStatus.addActionListener(e -> applyFilters());
 
         btnCheckout.addActionListener(e -> {
 
             controller.checkout(
                     getSelectedEquipment());
-            loadEquipment();
+            applyFilters();
         });
 
         btnCheckin.addActionListener(e -> {
 
             controller.checkin(
                     getSelectedEquipment());
-            loadEquipment();
+            applyFilters();
         });
 
         btnFlagFaulty.addActionListener(e -> {
 
             controller.flagFault(
                     getSelectedEquipment());
-            loadEquipment();
+            applyFilters();
         });
 
         btnBack.addActionListener(e -> {
@@ -186,6 +227,40 @@ public class CheckoutManagementFrame extends JFrame {
         }
 
         return null;
+    }
+
+    private void applyFilters() {
+
+        String type = (String) cmbType.getSelectedItem();
+
+        if ("All".equals(type)) {
+            type = null;
+        }
+
+        EquipmentStatus equipmentStatus
+                = (EquipmentStatus) cmbEquipmentStatus.getSelectedItem();
+
+        InspectionStatus inspectionStatus
+                = (InspectionStatus) cmbInspectionStatus.getSelectedItem();
+
+        Collection<Equipment> results
+                = inventoryService.filter(
+                        type,
+                        equipmentStatus,
+                        inspectionStatus);
+
+        String searchTerm = txtSearch.getText().trim();
+
+        if (!searchTerm.isBlank()) {
+
+            results = results.stream()
+                    .filter(e
+                            -> e.getName().toLowerCase()
+                            .contains(searchTerm.toLowerCase()))
+                    .toList();
+        }
+
+        loadEquipment(results);
     }
 
 }

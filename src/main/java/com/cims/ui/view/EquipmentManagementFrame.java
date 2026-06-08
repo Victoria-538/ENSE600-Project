@@ -8,6 +8,7 @@ import com.cims.model.domain.*;
 import com.cims.model.service.InventoryService;
 import com.cims.ui.controller.EquipmentManagementController;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.util.Collection;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +27,10 @@ public class EquipmentManagementFrame extends JFrame {
     private JScrollPane scrollPane;
 
     private JTextField txtSearch;
+
+    private JComboBox<String> cmbType;
+    private JComboBox<Object> cmbEquipmentStatus;
+    private JComboBox<Object> cmbInspectionStatus;
 
     private JButton btnSearch;
     private JButton btnAdd;
@@ -49,8 +54,9 @@ public class EquipmentManagementFrame extends JFrame {
     }
 
     private void initialiseFrame() {
+
         setTitle("Equipment Management");
-        setSize(800, 500);
+        setSize(1000, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -59,12 +65,33 @@ public class EquipmentManagementFrame extends JFrame {
 
         txtSearch = new JTextField(20);
 
+        cmbType = new JComboBox<>(new String[]{
+            "All",
+            "Hardware",
+            "Apparatus",
+            "Prop"
+        });
+
+        cmbEquipmentStatus = new JComboBox<>();
+        cmbEquipmentStatus.addItem("All");
+        for (EquipmentStatus s : EquipmentStatus.values()) {
+            cmbEquipmentStatus.addItem(s);
+        }
+
+        cmbInspectionStatus = new JComboBox<>();
+        cmbInspectionStatus.addItem("All");
+        for (InspectionStatus s : InspectionStatus.values()) {
+            cmbInspectionStatus.addItem(s);
+        }
+
         btnSearch = new JButton("Search");
+
         btnAdd = new JButton("Add");
         btnRemove = new JButton("Remove");
         btnBack = new JButton("Back");
 
         DefaultTableModel model = new DefaultTableModel() {
+
             @Override
             public boolean isCellEditable(int r, int c) {
                 return false;
@@ -91,26 +118,46 @@ public class EquipmentManagementFrame extends JFrame {
 
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
 
-        JPanel searchPanel = new JPanel();
-        searchPanel.add(new JLabel("Search:"));
+        JPanel topPanel = new JPanel(new BorderLayout());
+
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+        filterPanel.add(new JLabel("Type"));
+        filterPanel.add(cmbType);
+
+        filterPanel.add(new JLabel("Status"));
+        filterPanel.add(cmbEquipmentStatus);
+
+        filterPanel.add(new JLabel("Inspection"));
+        filterPanel.add(cmbInspectionStatus);
+
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+        searchPanel.add(new JLabel("Search"));
         searchPanel.add(txtSearch);
         searchPanel.add(btnSearch);
+
+        topPanel.add(filterPanel, BorderLayout.WEST);
+        topPanel.add(searchPanel, BorderLayout.EAST);
 
         JPanel bottomPanel = new JPanel(new BorderLayout());
 
         JPanel left = new JPanel();
+
         left.add(btnAdd);
         left.add(btnRemove);
 
         JPanel right = new JPanel();
+
         right.add(btnBack);
 
         bottomPanel.add(left, BorderLayout.WEST);
         bottomPanel.add(right, BorderLayout.EAST);
 
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.setBorder(
+                BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        mainPanel.add(searchPanel, BorderLayout.NORTH);
+        mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -139,8 +186,50 @@ public class EquipmentManagementFrame extends JFrame {
         });
 
         btnSearch.addActionListener(e -> performSearch());
+         cmbType.addActionListener(
+                e -> applyFilters());
+
+        cmbEquipmentStatus.addActionListener(
+                e -> applyFilters());
+
+        cmbInspectionStatus.addActionListener(
+                e -> applyFilters());
     }
 
+       private void applyFilters() {
+
+        String searchTerm = txtSearch.getText().trim();
+
+        String type =
+                "All".equals(cmbType.getSelectedItem())
+                ? null
+                : cmbType.getSelectedItem().toString();
+
+        EquipmentStatus equipmentStatus = null;
+
+        if (!(cmbEquipmentStatus.getSelectedItem() instanceof String)) {
+            equipmentStatus =
+                    (EquipmentStatus)
+                            cmbEquipmentStatus.getSelectedItem();
+        }
+
+        InspectionStatus inspectionStatus = null;
+
+        if (!(cmbInspectionStatus.getSelectedItem() instanceof String)) {
+            inspectionStatus =
+                    (InspectionStatus)
+                            cmbInspectionStatus.getSelectedItem();
+        }
+
+        Collection<Equipment> filtered =
+                controller.filter(
+                        searchTerm,
+                        type,
+                        equipmentStatus,
+                        inspectionStatus);
+
+        loadEquipment(filtered);
+    }
     private void refreshEquipmentTable() {
         loadEquipment(controller.getAllEquipment());
     }
@@ -156,12 +245,12 @@ public class EquipmentManagementFrame extends JFrame {
 
         for (Equipment e : list) {
             model.addRow(new Object[]{
-                    e.getId(),
-                    e.getName(),
-                    e.getEquipmentType(),
-                    e.getEquipmentStatus(),
-                    e.getInspectionStatus(),
-                    e.getTimesUsed()
+                e.getId(),
+                e.getName(),
+                e.getEquipmentType(),
+                e.getEquipmentStatus(),
+                e.getInspectionStatus(),
+                e.getTimesUsed()
             });
         }
     }
@@ -182,7 +271,9 @@ public class EquipmentManagementFrame extends JFrame {
                 .findFirst()
                 .orElse(null);
 
-        if (selected == null) return;
+        if (selected == null) {
+            return;
+        }
 
         int confirm = JOptionPane.showConfirmDialog(
                 this,
@@ -191,7 +282,9 @@ public class EquipmentManagementFrame extends JFrame {
                 JOptionPane.YES_NO_OPTION
         );
 
-        if (confirm != JOptionPane.YES_OPTION) return;
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
 
         controller.removeEquipment(selected);
 

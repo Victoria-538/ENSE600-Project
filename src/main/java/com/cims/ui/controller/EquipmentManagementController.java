@@ -8,13 +8,13 @@ import com.cims.model.domain.*;
 import com.cims.model.service.InventoryService;
 
 import java.util.Collection;
+
 /**
  *
  * @author gggob
  */
 public class EquipmentManagementController {
-    
-    
+
     private final InventoryService inventoryService;
 
     public EquipmentManagementController(InventoryService inventoryService) {
@@ -35,5 +35,32 @@ public class EquipmentManagementController {
     public void removeEquipment(Equipment equipment) {
         inventoryService.removeEquipment(equipment);
     }
-    
+
+    public Collection<Equipment> filter(
+            String searchTerm,
+            String type,
+            EquipmentStatus equipmentStatus,
+            InspectionStatus inspectionStatus) {
+
+        Collection<Equipment> results
+                = inventoryService.filter(
+                        type,
+                        equipmentStatus,
+                        inspectionStatus);
+
+        // Apply search on top of filtered results
+        if (searchTerm == null || searchTerm.isBlank()) {
+            return results;
+        }
+
+        String search = searchTerm.toLowerCase().trim();
+
+        return results.stream()
+                .filter(e
+                        -> e.getName().toLowerCase().contains(search)
+                || e.getId().toString().toLowerCase().contains(search)
+                || e.getEquipmentType().toLowerCase().contains(search))
+                .toList();
+    }
+
 }

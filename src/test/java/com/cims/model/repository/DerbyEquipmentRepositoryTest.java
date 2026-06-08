@@ -8,15 +8,9 @@ import com.cims.database.DatabaseInitialiser;
 import com.cims.database.DatabaseManager;
 import com.cims.model.domain.Apparatus;
 import com.cims.model.domain.Equipment;
-import com.cims.model.domain.EquipmentStatus;
 import com.cims.model.domain.Hardware;
-import com.cims.model.domain.InspectionStatus;
-import java.util.Collection;
 import java.util.UUID;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -2,7 +2,6 @@ M:\ENSE600\CIMS\src\main\java\com\cims\CIMS.java
 M:\ENSE600\CIMS\src\main\java\com\cims\database\DatabaseInitialiser.java
 M:\ENSE600\CIMS\src\main\java\com\cims\database\DatabaseManager.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\domain\ActionType.java
-M:\ENSE600\CIMS\src\main\java\com\cims\model\domain\Alert.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\domain\Apparatus.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\domain\AuditLog.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\domain\Equipment.java
@@ -21,8 +20,6 @@ M:\ENSE600\CIMS\src\main\java\com\cims\model\repository\DerbyAuditLogRepository.
 M:\ENSE600\CIMS\src\main\java\com\cims\model\repository\DerbyEquipmentRepository.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\repository\EquipmentRepository.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\repository\InMemoryEquipmentRepository.java
-M:\ENSE600\CIMS\src\main\java\com\cims\model\service\AlertService.java
-M:\ENSE600\CIMS\src\main\java\com\cims\model\service\AlertServiceImpl.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\service\AuditLogService.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\service\AuditLogServiceImpl.java
 M:\ENSE600\CIMS\src\main\java\com\cims\model\service\CheckoutService.java

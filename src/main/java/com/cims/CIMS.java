@@ -7,6 +7,7 @@ import com.cims.ui.view.LoginFrame;
 import com.cims.model.repository.*;
 import com.cims.database.*;
 import javax.swing.SwingUtilities;
+
 /**
  *
  * @author gggob
@@ -14,24 +15,27 @@ import javax.swing.SwingUtilities;
 public class CIMS {
 
     public static void main(String[] args) {
- DatabaseInitialiser.initialise();
 
-        EquipmentRepository repository =
-                new DerbyEquipmentRepository();
+        DatabaseInitialiser.initialise();
 
-        AuditLogRepository auditRepo =
-                new DerbyAuditLogRepository();
+        EquipmentRepository repository
+                = new DerbyEquipmentRepository();
+
+        AuditLogRepository auditRepo
+                = new DerbyAuditLogRepository();
+
+        Runtime.getRuntime().addShutdownHook(
+                new Thread(DatabaseManager::shutdown)
+        );
 
         SwingUtilities.invokeLater(() -> {
 
-            LoginFrame loginFrame =
-                    new LoginFrame(
+            LoginFrame loginFrame
+                    = new LoginFrame(
                             repository,
                             auditRepo);
 
             loginFrame.setVisible(true);
         });
-           
-        //]DatabaseManager.shutdown();      
     }
 }

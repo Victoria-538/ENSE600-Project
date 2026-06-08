@@ -44,9 +44,7 @@ public class DatabaseInitialiser {
             System.out.println("Equipment table created.");
         } catch (SQLException e) {
             // Derby throws exception if table already exists
-            if ("X0Y32".equals(e.getSQLState())) {
-                System.out.println("Equipment table already exists.");
-            } else {
+            if (!"X0Y32".equals(e.getSQLState())) {
                 throw e;
             }
         }
@@ -75,9 +73,7 @@ public class DatabaseInitialiser {
 
         } catch (SQLException e) {
 
-            if ("X0Y32".equals(e.getSQLState())) {
-                System.out.println("Usage history table already exists.");
-            } else {
+            if (!"X0Y32".equals(e.getSQLState())) {
                 throw e;
             }
         }
